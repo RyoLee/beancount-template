@@ -1,0 +1,7 @@
+;收入
+2022-09-16 open Income:Salary:AAABBC        ; 工资(AAABBC公司)
+2022-09-16 open Income:Bonus:AAABBC         ; 奖金(AAABBC公司)
+1970-01-01 open Income:Invest               ; 投资
+1970-01-01 open Income:Compensation         ; 赔付款
+1970-01-01 open Income:Trade                ; 交易咸鱼等
+1970-01-01 open Income:Extra                ; 意外收入,赠与,红包等

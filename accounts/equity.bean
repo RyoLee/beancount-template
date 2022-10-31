@@ -1,0 +1,6 @@
+;权益
+1970-01-01 open Equity:Opening-Balances     ; 初始化平账
+1970-01-01 open Equity:Round                ; 仅用于少数插件等导致的四舍五入误差平账,谨慎使用
+1970-01-01 open Equity:Unrealized           ; 未计入,谨慎使用
+1970-01-01 open Equity:Shopping             ; 非实时结算购物
+2022-01-01 close Equity:Opening-Balances    ; 完成初始化后关闭,注意需要在init.bean内初始化时间后

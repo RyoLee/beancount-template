@@ -1,0 +1,21 @@
+option "title" "我的账本"
+option "operating_currency" "CNY"
+option "booking_method" "FIFO"          ; 先卖旧的
+
+; 常用插件
+plugin "beancount.plugins.tag_pending"
+plugin "beancount.plugins.implicit_prices"
+plugin "beancount.plugins.forecast"
+plugin "beancount.plugins.sellgains"
+
+include "accounts/assets.bean"          ; 资产账户
+include "accounts/liabilities.bean"     ; 负债账户
+include "accounts/expenses.bean"        ; 支出账户
+include "accounts/income.bean"          ; 收入账户
+include "accounts/equity.bean"          ; 权益账户
+
+include "config/price.bean"             ; 汇率/价值/估值
+include "config/init.bean"              ; 初始化账本
+
+;各年度账本
+include "txs/*"

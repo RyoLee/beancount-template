@@ -1,0 +1,10 @@
+;负债账户
+1970-01-01 open Liabilities:Loan:Mortgage                           ; 抵押贷款
+
+1970-01-01 open Liabilities:CreditCard:ICBC:1234  CNY,USD           ; 工行信用卡尾号1234
+
+1970-01-01 open Liabilities:CreditCard:Ali-HB                       ; 花呗
+1970-01-01 open Liabilities:CreditCard:JD-BT                        ; 白条
+
+1970-01-01 open Liabilities:FinalPayment                            ; 尾款
+1970-01-01 open Liabilities:Payable                                 ; 应付款

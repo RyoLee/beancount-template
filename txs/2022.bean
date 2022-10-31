@@ -1,0 +1,3 @@
+
+2022-01-01 custom "fava-option" "insert-entry" ".*"     ; fava插入记录时插入该行之前(多次添加本选项时间越新的优先)
+2022-01-01 custom "fava-option" "default-file"          ; fava编辑器默认打开该文件(多次添加本选项时间越新的优先)

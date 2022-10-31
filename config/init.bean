@@ -1,0 +1,22 @@
+2021-01-01 pad Assets:Bank:CCB:1234 Equity:Opening-Balances
+2021-01-01 pad Assets:Bank:ICBC:1234 Equity:Opening-Balances
+2021-01-01 pad Assets:Digital:WeChat Equity:Opening-Balances
+2021-01-01 pad Assets:Digital:ECNY Equity:Opening-Balances
+
+2021-01-01 pad Liabilities:Loan:Mortgage Equity:Opening-Balances
+2021-01-01 pad Liabilities:CreditCard:ICBC:1234 Equity:Opening-Balances
+2021-01-01 pad Liabilities:CreditCard:JD-BT Equity:Opening-Balances
+
+2021-01-01 P
+  Assets:Tangibles                                            1 HOUSE.SP {2300000.00 CNY}
+  Equity:Opening-Balances
+
+2022-01-01 balance Assets:Tangibles                           1 HOUSE.SP
+2022-01-01 balance Assets:Bank:CCB:1234                12345.67 CNY
+2022-01-01 balance Assets:Bank:ICBC:1234                1234.56 CNY
+2022-01-01 balance Assets:Digital:ECNY                   123.45 CNY
+2022-01-01 balance Assets:Digital:WeChat                 543.21 CNY
+
+2022-01-01 balance Liabilities:Loan:Mortgage         -876543.21 CNY
+2022-01-01 balance Liabilities:CreditCard:ICBC:1234    -1232.10 CNY
+2022-01-01 balance Liabilities:CreditCard:JD-BT         -321.00 CNY

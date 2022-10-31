@@ -1,0 +1,31 @@
+;支出
+1970-01-01 open Expenses:Insurance                  ; 保险
+1970-01-01 open Expenses:Phone                      ; 通信费用
+1970-01-01 open Expenses:Net                        ; 网络相关
+1970-01-01 open Expenses:Water                      ; 水
+1970-01-01 open Expenses:Electric                   ; 电
+1970-01-01 open Expenses:Gas                        ; 煤
+1970-01-01 open Expenses:Rent                       ; 租房(含物业费)
+
+1970-01-01 open Expenses:Food                       ; 吃喝
+1970-01-01 open Expenses:ExTax                      ; 税务结算增补
+1970-01-01 open Expenses:Traffic                    ; 交通
+
+1970-01-01 open Expenses:Gift                       ; 赠与,礼物
+
+1970-01-01 open Expenses:Shopping:Clothing          ; 服饰鞋包
+1970-01-01 open Expenses:Shopping:Digital           ; 电子数码
+1970-01-01 open Expenses:Shopping:Home              ; 家居百货
+1970-01-01 open Expenses:Shopping:Book              ; 买书
+1970-01-01 open Expenses:Shopping:Makeup            ; 化妆护肤
+1970-01-01 open Expenses:Shopping:Entertainment     ; 娱乐性支出
+1970-01-01 open Expenses:Shopping:Other             ; 其他
+
+1970-01-01 open Expenses:Health:Outpatient          ; 门诊
+1970-01-01 open Expenses:Health:Medical             ; 药品
+1970-01-01 open Expenses:Health:Examination         ; 体检
+1970-01-01 open Expenses:Health:Other               ; 其他
+
+1970-01-01 open Expenses:Invest                     ; 其他投资
+
+1970-01-01 open Expenses:Other                      ; 其他

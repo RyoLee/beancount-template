@@ -1,0 +1,9 @@
+;资产
+1970-01-01 open Assets:Cash:CNY         CNY     ; 人民币现金
+1970-01-01 open Assets:Digital:ECNY             ; 数字人民币
+1970-01-01 open Assets:Digital:Alipay           ; 支付宝账户
+1970-01-01 open Assets:Digital:WeChat           ; 微信账户
+1970-01-01 open Assets:Digital:GiftCard         ; 礼品卡
+1970-01-01 open Assets:Tangibles                ; 实体资产
+1970-01-01 open Assets:Bank:ICBC:1234           ; 工行尾号1234
+1970-01-01 open Assets:Bank:CCB:1234            ; 建行尾号1234

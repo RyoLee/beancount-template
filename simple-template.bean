@@ -1,0 +1,63 @@
+option "title" "样例账本"
+option "operating_currency" "CNY"
+option "booking_method" "FIFO"              ;先卖旧的
+
+; 1. 借 10K CNY 贷 10K CNY (0.05%利, 结算不计小数)
+; 2. 支  2K CNY 租金
+; 3. 以 100 CNY 购入货物 * 50 
+; 4. 以 150 CNY 购入货物 * 50 
+; 5. 以 200 CNY 出售货物 * 30
+; 6. 以 180 CNY 出售货物 * 70
+; 7. 还 10K CNY 借 10K CNY 贷 & 利息
+
+1970-01-01 open Liabilities:Payable         ;借钱
+1970-01-01 open Liabilities:Bank            ;银行贷款
+1970-01-01 open Assets:Cash                 ;现金
+1970-01-01 open Assets:Tangibles            ;实体资产
+1970-01-01 open Expenses:Rent               ;仓库租金
+1970-01-01 open Expenses:Traffic            ;运输费用
+1970-01-01 open Expenses:Loan:Interest      ;利息
+1970-01-01 open Income:Trade                ;交易获利
+
+2000-01-01 * "借贷"
+  Liabilities:Payable           -10000 CNY
+  Liabilities:Bank              -10000 CNY
+  Assets:Cash                    20000 CNY
+
+2000-01-02 * "租金"
+  Expenses:Rent                   2000 CNY
+  Assets:Cash                    -2000 CNY
+
+2000-01-03 * "购入"
+  Expenses:Traffic                 200 CNY
+  Assets:Tangibles                  50 STH {100 CNY}
+  Assets:Cash                    -5200 CNY
+
+2000-01-04 * "购入"
+  Expenses:Traffic                 200 CNY
+  Assets:Tangibles                  50 STH {150 CNY}
+  Assets:Cash                    -7700 CNY
+
+2000-01-05 * "卖出"
+  Expenses:Traffic                 200 CNY
+  Assets:Tangibles                 -30 STH {} @ 200 CNY
+  Income:Trade
+  Assets:Cash                     5800 CNY
+
+2000-01-06 * "卖出"
+  Expenses:Traffic                 200 CNY
+  Assets:Tangibles                 -70 STH {} @ 180 CNY
+  Income:Trade
+  Assets:Cash                    12400 CNY
+
+2000-01-07 * "还"
+  Assets:Cash                   -10000 CNY
+  Liabilities:Payable            10000 CNY
+
+2000-01-07 * "还"
+  Assets:Cash                   -10030 CNY
+  Liabilities:Bank               10000 CNY
+  Expenses:Loan:Interest
+
+;断言检查对账
+2000-01-08 balance Assets:Cash    3270 CNY  ; 账上流动资金3270元
