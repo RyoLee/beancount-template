@@ -1,5 +1,9 @@
 # Beancount-template
 
+**请不要使用公开仓库存储你的账单**
+
+**请使用私有仓库或git-crypt等方式加密你的隐私数据**
+
 ## 语法&交易示例
 
 - `simple-template.bean`
