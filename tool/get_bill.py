@@ -9,8 +9,7 @@ import calendar
 import sys
 import os
 from dateutil.relativedelta import relativedelta
-_template = r'''
-\documentclass[UTF8]{ctexart}
+_template = r'''\documentclass[UTF8]{ctexart}
 \usepackage{multicol}
 \usepackage{geometry}
 
@@ -138,9 +137,18 @@ if __name__ == '__main__':
     ENV_DAY = str(day)
 
     # ENV_LINES_INCOME
-    sql_query = r'SELECT account, abs(sum(cost(position))) as total WHERE account ~ "^Income:*" and year = ' + \
-        ENV_YEAR + r' and month = ' + ENV_MONTH + \
-        r' GROUP BY month, account ORDER BY account, total DESC'
+    _sql_template = """
+        SELECT account, abs(sum(cost(position))) as total
+        WHERE account ~ "^Income:*"
+        and year = ENV_YEAR
+        and month = ENV_MONTH
+        GROUP BY month, account
+        ORDER BY account, total DESC
+    """
+    _sql_buffer = Buffer(_sql_template)
+    _sql_buffer.replace("ENV_YEAR", ENV_YEAR)
+    _sql_buffer.replace("ENV_MONTH", ENV_MONTH)
+    sql_query = str(_sql_buffer)
     rrows = query.run_query(ledger_data, options, sql_query, numberify=True)[1]
     ENV_LINES_INCOME = ""
     for rrow in rrows:
@@ -148,15 +156,33 @@ if __name__ == '__main__':
             '{0:.2f}'.format(rrow[1]) + r' \\' + '\n'
 
     # ENV_TOTAL_INCOME
-    sql_query = r'SELECT abs(sum(cost(position))) WHERE account ~ "^Income:*" and year = ' + \
-        ENV_YEAR + r' and month =  ' + ENV_MONTH + r' GROUP BY month'
+    _sql_template = """
+        SELECT abs(sum(cost(position)))
+        WHERE account ~ "^Income:*"
+        and year = ENV_YEAR
+        and month = ENV_MONTH
+        GROUP BY month
+    """
+    _sql_buffer = Buffer(_sql_template)
+    _sql_buffer.replace("ENV_YEAR", ENV_YEAR)
+    _sql_buffer.replace("ENV_MONTH", ENV_MONTH)
+    sql_query = str(_sql_buffer)
     rrows = query.run_query(ledger_data, options, sql_query, numberify=True)[1]
     ENV_TOTAL_INCOME = '{0:.2f}'.format(rrows[0][0])
 
     # ENV_LINES_EXPENSES
-    sql_query = r'SELECT account, sum(cost(position)) as total WHERE account ~ "^Expenses:*" and year = ' + \
-        ENV_YEAR + r' and month = ' + ENV_MONTH + \
-        r' GROUP BY month, account ORDER BY account, total DESC'
+    _sql_template = """
+        SELECT account, sum(cost(position)) as total
+        WHERE account ~ "^Expenses:*"
+        and year = ENV_YEAR 
+        and month = ENV_MONTH
+        GROUP BY month, account
+        ORDER BY account, total DESC
+    """
+    _sql_buffer = Buffer(_sql_template)
+    _sql_buffer.replace("ENV_YEAR", ENV_YEAR)
+    _sql_buffer.replace("ENV_MONTH", ENV_MONTH)
+    sql_query = str(_sql_buffer)
     rrows = query.run_query(ledger_data, options, sql_query, numberify=True)[1]
     ENV_LINES_EXPENSES = ""
     for rrow in rrows:
@@ -164,47 +190,130 @@ if __name__ == '__main__':
             '{0:.2f}'.format(rrow[1]) + r' \\' + '\n'
 
     # ENV_TOTAL_EXPENSES
-    sql_query = r'SELECT sum(cost(position)) WHERE account ~ "^Expenses:*" and year = ' + \
-        ENV_YEAR + r' and month = ' + ENV_MONTH + r' GROUP BY month'
+    _sql_template = """
+        SELECT sum(cost(position))
+        WHERE account ~ "^Expenses:*"
+        and year = ENV_YEAR
+        and month = ENV_MONTH
+        GROUP BY month
+    """
+    _sql_buffer = Buffer(_sql_template)
+    _sql_buffer.replace("ENV_YEAR", ENV_YEAR)
+    _sql_buffer.replace("ENV_MONTH", ENV_MONTH)
+    sql_query = str(_sql_buffer)
     rrows = query.run_query(ledger_data, options, sql_query, numberify=True)[1]
     ENV_TOTAL_EXPENSES = '{0:.2f}'.format(rrows[0][0])
 
     # ENV_NET_PROFIT
-    sql_query = r'SELECT abs(sum(cost(position))) WHERE year = ' + ENV_YEAR + r' and month = ' + \
-        ENV_MONTH + \
-        r' and ( account ~ "^Expenses:*" or account ~ "^Income:*" ) GROUP BY month'
+    _sql_template = """
+        SELECT sum(cost(position))
+        WHERE ( account ~ "^Expenses:*" or account ~ "^Income:*" )
+        and year = ENV_YEAR
+        and month = ENV_MONTH
+        GROUP BY month
+    """
+    _sql_buffer = Buffer(_sql_template)
+    _sql_buffer.replace("ENV_YEAR", ENV_YEAR)
+    _sql_buffer.replace("ENV_MONTH", ENV_MONTH)
+    sql_query = str(_sql_buffer)
     rrows = query.run_query(ledger_data, options, sql_query, numberify=True)[1]
-    ENV_NET_PROFIT = '{0:.2f}'.format(rrows[0][0])
+    ENV_NET_PROFIT = '{0:.2f}'.format(-1*rrows[0][0])
 
     # ENV_LINES_ASSETS
-    sql_query = r'SELECT account, sum(cost(position)) as total WHERE account ~ "^Assets:*" and year <= ' + \
-        ENV_YEAR + r' and month <= ' + ENV_MONTH + r' and day <= ' + \
-        ENV_DAY+r' ORDER BY account, total DESC'
+    _sql_template = """
+        SELECT account, sum(cost(position)) as total
+        WHERE account ~ "^Assets:*"
+        and ( 
+            year <  ENV_YEAR 
+            or (
+                year = ENV_YEAR 
+                and month <= ENV_MONTH
+                and day <= ENV_DAY
+            )
+        )
+        ORDER BY account, total DESC
+    """
+    _sql_buffer = Buffer(_sql_template)
+    _sql_buffer.replace("ENV_YEAR", ENV_YEAR)
+    _sql_buffer.replace("ENV_MONTH", ENV_MONTH)
+    _sql_buffer.replace("ENV_DAY", ENV_DAY)
+    sql_query = str(_sql_buffer)
     rrows = query.run_query(ledger_data, options, sql_query, numberify=True)[1]
     ENV_LINES_ASSETS = ""
     for rrow in rrows:
+        _t_val = rrow[1]
+        if _t_val is None:
+            _t_val = Decimal("0.00")
         ENV_LINES_ASSETS += rrow[0] + r' & ' + \
-            '{0:.2f}'.format(rrow[1]) + r' \\' + '\n'
+            '{0:.2f}'.format(_t_val) + r' \\' + '\n'
 
     # ENV_TOTAL_ASSETS
-    sql_query = r'SELECT sum(cost(position)) as total WHERE account ~ "^Assets:*" and year <= ' + \
-        ENV_YEAR + r' and month <= ' + ENV_MONTH + r' and day <= '+ENV_DAY
+    _sql_template = """
+        SELECT sum(cost(position)) as total
+        WHERE account ~ "^Assets:*"
+        and ( 
+            year <  ENV_YEAR 
+            or (
+                year = ENV_YEAR 
+                and month <= ENV_MONTH
+                and day <= ENV_DAY
+            )
+        )
+    """
+    _sql_buffer = Buffer(_sql_template)
+    _sql_buffer.replace("ENV_YEAR", ENV_YEAR)
+    _sql_buffer.replace("ENV_MONTH", ENV_MONTH)
+    _sql_buffer.replace("ENV_DAY", ENV_DAY)
+    sql_query = str(_sql_buffer)
     rrows = query.run_query(ledger_data, options, sql_query, numberify=True)[1]
     ENV_TOTAL_ASSETS = '{0:.2f}'.format(rrows[0][0])
 
     # ENV_LINES_LIABILITIES
-    sql_query = r'SELECT account, abs(sum(cost(position))) as total WHERE account ~ "^Liabilities:*" and year <= ' + \
-        ENV_YEAR + r' and month <= ' + ENV_MONTH + r' and day <= ' + \
-        ENV_DAY+r' ORDER BY account, total DESC'
+    _sql_template = """
+        SELECT account, sum(cost(position)) as total
+        WHERE account ~ "^Liabilities:*"
+        and ( 
+            year <  ENV_YEAR 
+            or (
+                year = ENV_YEAR 
+                and month <= ENV_MONTH
+                and day <= ENV_DAY
+            )
+        )
+        ORDER BY account, total DESC
+    """
+    _sql_buffer = Buffer(_sql_template)
+    _sql_buffer.replace("ENV_YEAR", ENV_YEAR)
+    _sql_buffer.replace("ENV_MONTH", ENV_MONTH)
+    _sql_buffer.replace("ENV_DAY", ENV_DAY)
+    sql_query = str(_sql_buffer)
     rrows = query.run_query(ledger_data, options, sql_query, numberify=True)[1]
     ENV_LINES_LIABILITIES = ""
     for rrow in rrows:
+        _t_val = rrow[1]
+        if _t_val is None:
+            _t_val = Decimal("0.00")
         ENV_LINES_LIABILITIES += rrow[0] + r' & ' + \
-            '{0:.2f}'.format(rrow[1]) + r' \\' + '\n'
+            '{0:.2f}'.format(_t_val) + r' \\' + '\n'
 
     # ENV_TOTAL_LIABILITIES
-    sql_query = r'SELECT abs(sum(cost(position))) as total WHERE account ~ "^Liabilities:*" and year <= ' + \
-        ENV_YEAR + r' and month <= ' + ENV_MONTH + r' and day <= '+ENV_DAY
+    _sql_template = """
+        SELECT sum(cost(position)) as total
+        WHERE account ~ "^Liabilities:*"
+        and ( 
+            year <  ENV_YEAR 
+            or (
+                year = ENV_YEAR 
+                and month <= ENV_MONTH
+                and day <= ENV_DAY
+            )
+        )
+    """
+    _sql_buffer = Buffer(_sql_template)
+    _sql_buffer.replace("ENV_YEAR", ENV_YEAR)
+    _sql_buffer.replace("ENV_MONTH", ENV_MONTH)
+    _sql_buffer.replace("ENV_DAY", ENV_DAY)
+    sql_query = str(_sql_buffer)
     rrows = query.run_query(ledger_data, options, sql_query, numberify=True)[1]
     ENV_TOTAL_LIABILITIES = '{0:.2f}'.format(rrows[0][0])
 
